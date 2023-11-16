@@ -1,0 +1,23 @@
+name: Closed PR
+env:
+  GIT_SHA: ${{ github.sha }}
+on:
+  pull_request:
+    types: [closed]
+    branches-ignore:
+      - master
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.extract_branch.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract Branch Name
+        id: extract_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '-')"
+
+      - name: Run Some Task
+        run: |
+          echo "This job runs when a pull request is merged or closed."
