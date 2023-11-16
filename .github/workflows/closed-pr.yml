@@ -8,6 +8,7 @@ on:
       - main
 jobs:
   setup:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.extract_branch.outputs.branch }}
@@ -20,4 +21,4 @@ jobs:
 
       - name: Run Some Task
         run: |
-          echo "This job runs when a pull request is merged or closed."
+          echo "This job runs when a pull request is merged or closed. ${{ steps.extract_branch.outputs.branch }}"
