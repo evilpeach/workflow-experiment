@@ -1,24 +1,23 @@
-name: Closed PR
-env:
-  GIT_SHA: ${{ github.sha }}
+name: Close Pull Request
+
+# only trigger on pull request closed events
 on:
   pull_request:
     types: [closed]
-    branches-ignore:
-      - main
-jobs:
-  setup:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ steps.extract_branch.outputs.branch }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Extract Branch Name
-        id: extract_branch
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '-')"
 
-      - name: Run Some Task
-        run: |
-          echo "This job runs when a pull request is merged or closed. ${{ steps.extract_branch.outputs.branch }}"
+jobs:
+  merge_job:
+    # this job will only run if the PR has been merged
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo PR #${{ github.event.number }} has been merged
+
+  close_job:
+    # this job will only run if the PR has been closed without being merged
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo PR #${{ github.event.number }} has been closed without being merged
