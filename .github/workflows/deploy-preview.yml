@@ -1,9 +1,7 @@
 name: Test and Deploy preview
 on:
   pull_request:
-    branches-ignore:
-      - main
-  push:
+    types: [opened, synchronize]
     branches-ignore:
       - main
 jobs:
@@ -17,28 +15,18 @@ jobs:
         id: extract_branch
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${{ github.head_ref }} | tr '/' '-')"
-  test:
-    if: github.event_name != 'pull_request' || github.event.action != 'closed'
+  deploy-preview:
     runs-on: ubuntu-latest
     needs: setup
-    steps:
-      - uses: actions/checkout@v3
-      - name: Test
-        run: echo "Test"
-  comment:
-    needs: ["setup", "test"]
-    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
       - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v4
+        uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Branch name is ${{ needs.setup.outputs.branch_name }}.`
-            });
+              body: '👋 Thanks for reporting!'
+            })
