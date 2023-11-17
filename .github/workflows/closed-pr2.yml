@@ -4,8 +4,6 @@ name: Close Pull Request2
 on:
   pull_request:
     types: [closed]
-    branches-ignore:
-      - main
 
 jobs:
   merge_or_close_job:
