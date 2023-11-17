@@ -14,7 +14,7 @@ jobs:
       - name: Extract Branch Name
         id: extract_branch
         shell: bash
-        run: \
+        run: |
           echo "##[set-output name=branch;]$(echo ${{ github.head_ref }} | tr '/' '-')"
           echo "${{env.API_KEYS}}"
   deploy-preview:
