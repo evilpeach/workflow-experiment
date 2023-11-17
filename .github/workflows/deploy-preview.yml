@@ -25,13 +25,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Test
         run: echo "Test"
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v3
+      - uses: marocchino/sticky-pull-request-comment@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: 17
-          body: |
-            Branch name
-            ${{ needs.setup.outputs.branch_name }}
-            PR
-            ${{ github.event.pull_request.number }}
+          message: |
+            Release ${{ github.sha }} to <https://pr-${{ github.event.number }}.example.com> Branch: ${{needs.setup.outputs.branch_name}}
