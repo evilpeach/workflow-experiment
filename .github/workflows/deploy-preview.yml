@@ -30,7 +30,7 @@ jobs:
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v3
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.number }}
           body: |
             Branch name
             ${{ needs.setup.outputs.branch_name }}
