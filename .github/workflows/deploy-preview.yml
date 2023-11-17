@@ -28,10 +28,9 @@ jobs:
   comment:
     needs: ["setup", "test"]
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
     steps:
       - name: Comment on PR
-        if: github.event_name == 'pull_request'
         uses: actions/github-script@v4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
