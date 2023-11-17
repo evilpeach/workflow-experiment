@@ -1,9 +1,7 @@
 name: Test and Deploy preview
 on:
   pull_request:
-    branches-ignore:
-      - main
-  push:
+    types: [opened, synchronize]
     branches-ignore:
       - main
 jobs:
@@ -17,17 +15,18 @@ jobs:
         id: extract_branch
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${{ github.head_ref }} | tr '/' '-')"
-  test:
+  deploy-preview:
     runs-on: ubuntu-latest
     needs: setup
+    if: github.event_name == 'pull_request'
     steps:
       - name: Comment on PR
         uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: '👋 Thanks for reporting!'
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
             })
