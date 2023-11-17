@@ -13,3 +13,11 @@ jobs:
     steps:
       - run: |
           echo PR #${{ github.event.number }} has been closed or been merged
+      - uses: actions/checkout@v3
+      - name: Extract Branch Name
+        id: extract_branch
+        run: echo "branch=${{ github.head_ref }}" >> $GITHUB_ENV
+
+      - name: Use Branch Name
+        run: |
+          echo "The branch name is ${{ env.branch }}"

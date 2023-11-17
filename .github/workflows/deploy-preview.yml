@@ -18,4 +18,4 @@ jobs:
 
       - name: Use Branch Name
         run: |
-          echo "The br
+          echo "The branch name is ${{ env.branch }}"
