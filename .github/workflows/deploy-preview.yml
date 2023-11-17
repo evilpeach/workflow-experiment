@@ -22,13 +22,12 @@ jobs:
     needs: setup
     steps:
       - name: Comment on PR
-        uses: actions/github-script@v4
+        uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Branch name is ${{needs.setup.outputs.branch_name}}.`
-            });
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '👋 Thanks for reporting!'
+            })
