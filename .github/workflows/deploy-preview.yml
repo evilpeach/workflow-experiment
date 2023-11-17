@@ -2,8 +2,7 @@ name: Test and Deploy preview
 on:
   pull_request:
     types: [opened, synchronize]
-    branches-ignore:
-      - main
+
 jobs:
   setup:
     runs-on: ubuntu-latest
