@@ -7,15 +7,33 @@ on:
     branches-ignore:
       - main
 jobs:
-  test:
-    if: github.event_name != 'pull_request' || github.event.action != 'closed'
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.extract_branch.outputs.branch }}
     steps:
       - uses: actions/checkout@v3
       - name: Extract Branch Name
         id: extract_branch
-        run: echo "branch=${{ github.head_ref }}" >> $GITHUB_ENV
-
-      - name: Use Branch Name
-        run: |
-          echo "The branch name is ${{ env.branch }}"
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${{ github.head_ref }} | tr '/' '-')"
+  test:
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test
+        run: echo "Test"
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Branch name is ${{ needs.setup.outputs.branch_name }}.`
+            });
