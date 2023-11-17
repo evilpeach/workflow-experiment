@@ -24,13 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - uses: actions/checkout@v3
-      - name: Test
-        run: echo "Test"
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v3
+      - name: Comment on PR
+        uses: actions/github-script@v4
         with:
-          issue-number: ${{ github.event.number }}
-          body: |
-            Branch name
-            ${{ needs.setup.outputs.branch_name }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Branch name is ${{needs.setup.outputs.branch_name}}.`
+            });
