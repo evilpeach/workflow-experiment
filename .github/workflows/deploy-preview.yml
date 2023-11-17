@@ -25,6 +25,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Test
         run: echo "Test"
+  comment:
+    needs: ["setup", "test"]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
       - name: Comment on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v4
