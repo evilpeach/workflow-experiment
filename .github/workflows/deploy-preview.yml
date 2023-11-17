@@ -2,7 +2,8 @@ name: Test and Deploy preview
 on:
   pull_request:
     types: [opened, synchronize]
-
+permissions:
+  pull-requests: write
 jobs:
   setup:
     runs-on: ubuntu-latest
