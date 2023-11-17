@@ -28,6 +28,7 @@ jobs:
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: 17
           body: |
             Branch name
