@@ -1,9 +1,11 @@
-name: Close Pull Request
+name: Close Pull Request2
 
 # only trigger on pull request closed events
 on:
   pull_request:
     types: [closed]
+    branches-ignore:
+      - main
 
 jobs:
   merge_or_close_job:
