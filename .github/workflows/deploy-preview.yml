@@ -15,6 +15,7 @@ jobs:
         id: extract_branch
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${{ github.head_ref }} | tr '/' '-')"
+
   deploy-preview:
     runs-on: ubuntu-latest
     needs: setup
@@ -28,5 +29,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Branch Name is ${{ needs.setup.outputs.branch_name }}.'
+              body: 'Branch Name is ${{ needs.setup.outputs.branch_name }}. key: ${{ vars.API_KEYS }}'
             })
