@@ -25,9 +25,10 @@ jobs:
       - uses: actions/checkout@v3
       - name: Test
         run: echo "Test"
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
         with:
-          message: |
-            Hello world ! :wave:
-          pr_number: ${{ github.event.number }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Branch name
+            ${{ needs.setup.outputs.branch_name }}
