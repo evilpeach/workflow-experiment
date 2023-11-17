@@ -29,8 +29,9 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const prNumber = context.payload.pull_request.number;
             github.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `Branch name is ${{needs.setup.outputs.branch_name}}.`
