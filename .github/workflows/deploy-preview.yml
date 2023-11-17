@@ -1,7 +1,13 @@
 name: Test and Deploy preview
 on:
   pull_request:
-    types: [opened, synchronize]
+    branches-ignore:
+      - main
+      - staging
+  push:
+    branches-ignore:
+      - main
+      - staging
 permissions:
   pull-requests: write
 jobs:
@@ -18,7 +24,7 @@ jobs:
   deploy-preview:
     runs-on: ubuntu-latest
     needs: setup
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize')
     steps:
       - name: Comment on PR
         uses: actions/github-script@v7
